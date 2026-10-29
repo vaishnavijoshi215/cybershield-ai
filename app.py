@@ -5,11 +5,11 @@ from pathlib import Path
 from datetime import datetime
 
 app = Flask(__name__)
+
 BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = BASE_DIR / "incidents.db"
 
 
-# Create database and table
 def init_db():
     with sqlite3.connect(DB_PATH) as conn:
         conn.execute("""
@@ -25,28 +25,34 @@ def init_db():
         """)
 
 
-# Basic rule-based risk assessment
 def assess_risk(incident_type, description):
-    kind = incident_type.lower()
-    details = description.lower()
-    text = kind + " " + details
+    text = f"{incident_type} {description}".lower()
 
-    if any(word in text for word in [
-        "ransomware", "malware", "data breach",
-        "unauthorized access", "data theft"
-    ]):
+    critical_keywords = [
+        "ransomware",
+        "malware",
+        "data breach",
+        "unauthorized access",
+        "data theft"
+    ]
+
+    high_keywords = [
+        "phishing",
+        "suspicious login",
+        "password attack",
+        "brute force",
+        "credential theft"
+    ]
+
+    if any(word in text for word in critical_keywords):
         return "Critical"
 
-    if any(word in text for word in [
-        "phishing", "suspicious login", "password attack",
-        "brute force", "credential theft"
-    ]):
+    if any(word in text for word in high_keywords):
         return "High"
 
     return "Medium"
 
 
-# Serve the existing frontend
 @app.route("/")
 def home():
     return send_from_directory(str(BASE_DIR), "login.html")
@@ -55,7 +61,10 @@ def home():
 @app.route("/<path:filename>")
 def frontend_files(filename):
     allowed_files = {
-        "login.html", "index.html", "style.css", "script.js"
+        "login.html",
+        "index.html",
+        "style.css",
+        "script.js"
     }
 
     if filename not in allowed_files:
@@ -64,7 +73,6 @@ def frontend_files(filename):
     return send_from_directory(str(BASE_DIR), filename)
 
 
-# Get all incidents
 @app.route("/api/incidents", methods=["GET"])
 def get_incidents():
     with sqlite3.connect(DB_PATH) as conn:
@@ -76,14 +84,21 @@ def get_incidents():
     return jsonify([dict(row) for row in rows])
 
 
-# Add an incident
 @app.route("/api/incidents", methods=["POST"])
 def add_incident():
     data = request.get_json(silent=True) or {}
 
-    incident_type = str(data.get("incident_type", "")).strip()
-    description = str(data.get("description", "")).strip()
-    source = str(data.get("source", "")).strip()
+    incident_type = str(
+        data.get("incident_type", "")
+    ).strip()
+
+    description = str(
+        data.get("description", "")
+    ).strip()
+
+    source = str(
+        data.get("source", "")
+    ).strip()
 
     if not incident_type or not description or not source:
         return jsonify({
@@ -91,20 +106,30 @@ def add_incident():
         }), 400
 
     risk_level = assess_risk(incident_type, description)
+
     created_at = datetime.now().astimezone().isoformat(
         timespec="seconds"
     )
 
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.execute("""
-            INSERT INTO incidents
-            (incident_type, description, source, risk_level,
-             status, created_at)
+            INSERT INTO incidents (
+                incident_type,
+                description,
+                source,
+                risk_level,
+                status,
+                created_at
+            )
             VALUES (?, ?, ?, ?, 'Open', ?)
         """, (
-            incident_type, description, source,
-            risk_level, created_at
+            incident_type,
+            description,
+            source,
+            risk_level,
+            created_at
         ))
+
         incident_id = cursor.lastrowid
 
     return jsonify({
@@ -114,7 +139,6 @@ def add_incident():
     }), 201
 
 
-# Resolve an incident
 @app.route("/api/incidents/<int:incident_id>/resolve", methods=["PATCH"])
 def resolve_incident(incident_id):
     with sqlite3.connect(DB_PATH) as conn:
@@ -129,7 +153,6 @@ def resolve_incident(incident_id):
     return jsonify({"message": "Incident resolved"})
 
 
-# Delete an incident
 @app.route("/api/incidents/<int:incident_id>", methods=["DELETE"])
 def delete_incident(incident_id):
     with sqlite3.connect(DB_PATH) as conn:
@@ -144,6 +167,9 @@ def delete_incident(incident_id):
     return jsonify({"message": "Incident deleted"})
 
 
+# Initialize the database when the application starts.
+init_db()
+
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True, port=5000)
