@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield AI | Cybersecurity Incident Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CyberShield AI</h1>
+        <p>AI-Based Cybersecurity Incident Analyzer</p>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2>Security Dashboard</h2>
+            <p>Monitor, report and analyze cybersecurity incidents.</p>
+        </section>
+
+        <section class="cards">
+            <div class="card">
+                <h3>Total Incidents</h3>
+                <p id="totalIncidents">0</p>
+            </div>
+
+            <div class="card">
+                <h3>High-Risk Incidents</h3>
+                <p id="highRisk">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Resolved Incidents</h3>
+                <p id="resolved">0</p>
+            </div>
+        </section>
+
+        <section class="analytics">
+            <h2>Risk Analytics</h2>
+            <p class="section-description">
+                Overview of reported incidents by risk level.
+            </p>
+
+            <div class="chart-row">
+                <div class="chart-label">
+                    <span>Critical</span>
+                    <span id="criticalCount">0</span>
+                </div>
+                <div class="bar-background">
+                    <div id="criticalBar" class="bar critical-bar"></div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <div class="chart-label">
+                    <span>High</span>
+                    <span id="highCount">0</span>
+                </div>
+                <div class="bar-background">
+                    <div id="highBar" class="bar high-bar"></div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <div class="chart-label">
+                    <span>Medium</span>
+                    <span id="mediumCount">0</span>
+                </div>
+                <div class="bar-background">
+                    <div id="mediumBar" class="bar medium-bar"></div>
+                </div>
+            </div>
+
+            <p id="chartMessage" class="chart-message"></p>
+        </section>
+
+        <section class="report">
+            <h2>Report a Security Incident</h2>
+
+            <form id="incidentForm">
+                <label for="incidentType">Incident Type</label>
+                <select id="incidentType" required>
+                    <option value="">Select incident type</option>
+                    <option value="Phishing">Phishing</option>
+                    <option value="Malware">Malware</option>
+                    <option value="Suspicious Login">Suspicious Login</option>
+                    <option value="Unauthorized Access">Unauthorized Access</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="description">Description</label>
+                <textarea id="description"
+                    placeholder="Describe the incident..."
+                    required></textarea>
+
+                <label for="source">Source or Device</label>
+                <input id="source" type="text"
+                    placeholder="e.g. Unknown email sender">
+
+                <button type="submit">Analyze Incident</button>
+            </form>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <section class="history">
+            <h2>Incident History</h2>
+            <p class="section-description">
+                Search, filter and manage security incidents.
+            </p>
+
+            <div class="search-filter">
+                <input type="text" id="searchIncident"
+                    placeholder="Search type, description or source...">
+
+                <select id="riskFilter">
+                    <option value="All">All Risk Levels</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                </select>
+
+                <select id="statusFilter">
+                    <option value="All">All Statuses</option>
+                    <option value="Open">Open</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table id="incidentTable">
+                    <thead>
+                        <tr>
+                            <th>Incident Type</th>
+                            <th>Description</th>
+                            <th>Source</th>
+                            <th>Risk Level</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="incidentTableBody">
+                        <tr>
+                            <td colspan="7">No incidents to display.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>CyberShield AI &copy; 2026 | Cybersecurity Incident Analyzer</p>
+        <p>Academic Project Demonstration</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

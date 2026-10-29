@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | CyberShield AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #f1f5f9;
+            background: linear-gradient(135deg, #07111f, #102746);
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 36px 30px;
+            background: #0f1e33;
+            border: 1px solid #263d5c;
+            border-radius: 18px;
+            box-shadow: 0 20px 60px #0005;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 18px;
+            border-radius: 16px;
+            background: #173b63;
+            font-size: 32px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 27px;
+        }
+
+        h1 span {
+            color: #38bdf8;
+        }
+
+        .subtitle {
+            margin: 10px 0 28px;
+            text-align: center;
+            color: #9aabc1;
+            font-size: 13px;
+        }
+
+        .security-label {
+            margin-bottom: 25px;
+            text-align: center;
+            color: #7dd3fc;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #30445e;
+            border-radius: 9px;
+            background: #0a1729;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #38bdf8;
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        .password-box input {
+            padding-right: 65px;
+        }
+
+        .toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #7dd3fc;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #1683c4;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #0872b4;
+        }
+
+        #message {
+            min-height: 20px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #8294ac;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login-card">
+        <div class="logo">🛡️</div>
+
+        <h1>CyberShield <span>AI</span></h1>
+
+        <p class="subtitle">
+            AI-Based Cybersecurity Incident Analyzer
+        </p>
+
+        <div class="security-label">
+            SECURITY ANALYST PORTAL
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <div class="password-box">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle"
+                        id="togglePassword"
+                    >Show</button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">
+                Sign In to Dashboard →
+            </button>
+
+            <p id="message" role="status"></p>
+        </form>
+
+        <div class="footer">
+            CyberShield AI · Security Incident Monitoring<br>
+            Academic Project Demo
+        </div>
+    </main>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
+        const message = document.getElementById("message");
+
+        togglePassword.addEventListener("click", function () {
+            const isHidden = passwordInput.type === "password";
+
+            passwordInput.type = isHidden ? "text" : "password";
+            togglePassword.textContent = isHidden ? "Hide" : "Show";
+        });
+
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!emailInput.value.trim() || !passwordInput.value) {
+                message.style.color = "#f87171";
+                message.textContent = "Please enter your email and password.";
+                return;
+            }
+
+            // Demo navigation only; this is not secure authentication.
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+</html>
